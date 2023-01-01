@@ -1,10 +1,10 @@
-let gameSpeed = 5;
+export const gameSpeed = 5;
+export const CANVAS_WIDTH = 800;
+export const CANVAS_HEIGHT = 600;
 
-const backgroundImg = new Image();
-backgroundImg.src = "../assets/background.jpg";
-
-class Layer {
-  constructor(image, speedModifier) {
+export class Layer {
+  constructor(ctx, image, speedModifier) {
+    this.ctx = ctx;
     this.x = 0;
     this.y = 0;
     this.width = CANVAS_WIDTH;
@@ -22,8 +22,8 @@ class Layer {
   }
 
   draw() {
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-    ctx.drawImage(
+    this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    this.ctx.drawImage(
       this.image,
       this.x + this.width,
       this.y,
@@ -32,14 +32,3 @@ class Layer {
     );
   }
 }
-
-const layer1 = new Layer(backgroundImg, 1);
-
-function animate() {
-  ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  layer1.update();
-  layer1.draw();
-  requestAnimationFrame(animate);
-}
-
-animate();

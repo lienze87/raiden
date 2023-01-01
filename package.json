@@ -1,0 +1,28 @@
+{
+  "name": "raiden",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "author": "lienze",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lienze87/raiden.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lienze87/raiden/issues"
+  },
+  "homepage": "https://github.com/lienze87/raiden#readme",
+  "dependencies": {
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "vite": "^4.0.0"
+  }
+}
