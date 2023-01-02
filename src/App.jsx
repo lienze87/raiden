@@ -1,13 +1,46 @@
 import { useEffect } from "react";
-import { Layer, CANVAS_WIDTH, CANVAS_HEIGHT } from "./components/layer";
 import ImgUrl from "./assets/background.jpg";
-
-let ctx = null;
 
 const backgroundImg = new Image();
 backgroundImg.src = ImgUrl;
 
+const gameSpeed = 5;
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 600;
+
+class Layer {
+  constructor(ctx, image, speedModifier) {
+    this.ctx = ctx;
+    this.x = 0;
+    this.y = 0;
+    this.width = CANVAS_WIDTH;
+    this.height = CANVAS_HEIGHT;
+    this.image = image;
+    this.speedModifier = speedModifier;
+    this.speed = gameSpeed * this.speedModifier;
+  }
+  update() {
+    this.speed = gameSpeed * this.speedModifier;
+    if (this.x <= -this.width) {
+      this.x = 0;
+    }
+    this.x = Math.floor(this.x - this.speed);
+  }
+
+  draw() {
+    this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    this.ctx.drawImage(
+      this.image,
+      this.x + this.width,
+      this.y,
+      this.width,
+      this.height
+    );
+  }
+}
+
 function App() {
+  let ctx = null;
   const initCanvas = () => {
     const root = document.getElementById("root");
 
