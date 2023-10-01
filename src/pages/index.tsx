@@ -1,61 +1,50 @@
-import { useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
+import { marked } from "marked";
+import { TextField } from "@mui/material";
 import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Checkbox from "@mui/material/Checkbox";
 
 export default function BasicList() {
-  const [checked, setChecked] = useState([0]);
+  const [content, setContent] = useState("");
+  const [mdHtml, setMdHtml] = useState({
+    __html: "",
+  });
 
-  const dataList = [
-    {
-      index: 0,
-      text: "设计原型图",
-    },
-    {
-      index: 1,
-      text: "设计基础架构",
-    },
-  ];
+  useEffect(() => {
+    const delayRender = setTimeout(() => {
+      setMdHtml({
+        __html: marked.parse(content),
+      });
+    }, 500);
+    return () => clearTimeout(delayRender);
+  }, [content]);
 
-  const handleToggle = (index: number) => {
-    const currentIndex = checked.indexOf(index);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(index);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(event.target.value);
   };
 
   return (
-    <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-      <div className="title">代办事项</div>
-      <List>
-        {dataList.map((value: { index: number; text: string }) => {
-          return (
-            <ListItem key={value.index} disablePadding>
-              <ListItemButton onClick={() => handleToggle(value.index)} dense>
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={checked.indexOf(value.index) != -1}
-                    tabIndex={-1}
-                    disableRipple
-                  />
-                </ListItemIcon>
-                <ListItemText primary={value.text}></ListItemText>
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
-      </List>
+    <Box className="container" sx={{ display: "flex", padding: 1 }}>
+      <Box className="editor" sx={{ flex: 1, marginRight: 1 }}>
+        <TextField
+          value={content}
+          multiline
+          minRows={10}
+          style={{ width: "100%" }}
+          onChange={handleChange}
+        />
+      </Box>
+      <Box className="render" sx={{ flex: 1 }}>
+        <Box
+          sx={{
+            padding: "14px",
+            boxSizing: "border-box",
+            height: "100%",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+          }}>
+          <div dangerouslySetInnerHTML={mdHtml}></div>
+        </Box>
+      </Box>
     </Box>
   );
 }
