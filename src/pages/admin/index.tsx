@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,27 +8,36 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 
+import "./main.css";
+
 function createData(
   title: string,
-  type: number,
+  type: string,
   count: number,
-  createTime: number,
-  updateTime: number
+  createTime: string,
+  updateTime: string
 ) {
   return { title, type, count, createTime, updateTime };
 }
 
 const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Frozen yoghurt", "txt", 3000, "2023/10/01", "2023/10/02"),
+  createData("Ice cream sandwich", "md", 3000, "2023/10/01", "2023/10/02"),
+  createData("Eclair", "txt", 3000, "2023/12/01", "2023/12/02"),
+  createData("Cupcake", "md", 3000, "2023/11/01", "2023/11/02"),
+  createData("Gingerbread", "txt", 3000, "2023/11/01", "2023/11/02"),
 ];
 
-const handleRemove = (data: any) => {};
-
 export default function BasicTable() {
+  const [dataList, setDataList] = useState(rows);
+
+  const handleRemove = (data: any, index: number) => {
+    let tempList = dataList.slice();
+    tempList.splice(index, 1);
+
+    setDataList(tempList);
+  };
+
   return (
     <div className="container">
       <div className="action-bar">
@@ -47,7 +56,7 @@ export default function BasicTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {dataList.map((row, index) => (
               <TableRow
                 key={row.title}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
@@ -62,7 +71,7 @@ export default function BasicTable() {
                   <Button
                     variant="outlined"
                     color="error"
-                    onClick={() => handleRemove(row)}>
+                    onClick={() => handleRemove(row, index)}>
                     删除
                   </Button>
                 </TableCell>
