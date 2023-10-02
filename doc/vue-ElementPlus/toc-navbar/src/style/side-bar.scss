@@ -1,0 +1,184 @@
+:root {
+  // layouts
+  --vp-screen-max-width: 1376px;
+
+  // colors
+  --text-color: var(--el-text-color-primary);
+  --text-color-light: var(--el-text-color-regular);
+  --text-color-lighter: var(--el-text-color-secondary);
+
+  --brand-color: var(--el-color-primary);
+  --brand-color-light: var(--el-color-primary-light-1);
+  --bg-brand-color: var(--el-color-primary-light-9);
+
+  --bg-color: var(--el-bg-color);
+  --bg-color-rgb: 255, 255, 255;
+  --bg-color-soft: #fafafa;
+  --bg-color-mute: #f2f2f2;
+  --border-color: var(--el-border-color);
+  --border-color-light: var(--el-border-color-lighter);
+
+  --font-family: var(--el-font-family);
+  --font-family-mono: 'JetBrains Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+
+  // info
+  --success-color: var(--el-color-success);
+  --warning-color: var(--el-color-warning);
+  --danger-color: var(--el-color-danger);
+
+  // header vars
+  --header-height: 95px;
+  --nav-height: 55px; // alias of --header-height
+
+  /* Screen Size */
+  --vp-screen-max-width: 1362px;
+
+  // sidebar
+  --vp-sidebar-width-mobile: 320px;
+  --vp-sidebar-width-small: 266px;
+
+  --sidebar-width-sm: 16rem;
+  --sidebar-width-xs: 20rem;
+  --content-min-width: 16rem;
+  --content-max-width: 48rem;
+
+  --nav-z-index: 11;
+  --sub-nav-z-index: 11;
+  --sidebar-z-index: 40;
+  --overlay-z-index: 30;
+  // --dropdown-z-index: 22;
+
+  // code block vars
+  --code-line-height: 1.4;
+  --code-font-size: var(--el-font-size-base);
+  --code-bg-color: var(--el-fill-color-light);
+  --code-text-color: var(--text-color);
+  --code-font-family: var(--font-family-mono);
+
+  // tip block
+  --block-tip-bg-color: rgba(var(--el-color-primary-rgb), 0.1);
+  --block-warning-bg-color: rgba(var(--el-color-danger-rgb), 0.1);
+
+  // link
+  --link-active-bg-color: rgba(var(--el-color-primary-rgb), 0.1);
+}
+
+$breakpoint-max: 1680px !default;
+$breakpoint-xxl: 1440px !default;
+$breakpoint-xlg: 1280px !default;
+$breakpoint-lg: 960px !default;
+$breakpoint-md: 768px !default;
+$breakpoint-sm: 480px !default;
+
+// scrollbar width
+$scrollbar-size: 6px;
+
+.content-wrapper {
+  display: block;
+
+  .content-container {
+    position: relative;
+    min-width: 800px;
+    width: 100%;
+    overflow: auto;
+
+    .app-container {
+      padding: 0 20px;
+    }
+
+    .app-container:last-child {
+      padding-bottom: 48px;
+    }
+
+    @media screen and (min-width: $breakpoint-max) {
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+  }
+
+  @media screen and (min-width: $breakpoint-max) {
+    display: flex;
+  }
+}
+
+.toc-wrapper {
+  display: none;
+  padding-left: 64px;
+  flex-basis: 300px;
+
+  ul,
+  ol {
+    padding-left: 1.25em;
+  }
+
+  .toc-content {
+    position: fixed;
+    top: calc(var(--header-height) + 32px);
+    margin-top: 0;
+    padding: 4px 8px 4px 12px;
+    margin-bottom: 32px;
+    width: 200px;
+
+    .toc-marker {
+      opacity: 0;
+      position: absolute;
+      background-color: var(--brand-color);
+      border-radius: 4px;
+      width: 4px;
+      height: 14px;
+      top: 30px;
+      left: 0;
+      z-index: 0;
+      transition: top 0.25s cubic-bezier(0, 1, 0.5, 1), opacity 0.25s, background-color 0.5s;
+    }
+
+    &__heading {
+      font-size: 12px;
+      color: var(--text-color-light);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 0;
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    .toc-items {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0 0;
+      line-height: 1.2;
+
+      .toc-item {
+        margin-top: 10px;
+        font-size: 11px;
+        color: var(--text-color-lighter);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        color: inherit;
+
+        .toc-link {
+          position: relative;
+          color: var(--text-color-lighter);
+          transition: color var(--el-transition-duration);
+          cursor: pointer;
+          &.active {
+            color: var(--brand-color);
+          }
+          &:target {
+            margin-top: 94px !important;
+          }
+        }
+
+        &.subitem {
+          padding-left: 1rem;
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: $breakpoint-max) {
+    padding-left: 48px;
+    display: block;
+  }
+}
