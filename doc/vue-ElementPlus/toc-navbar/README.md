@@ -6,10 +6,6 @@
 
 [example](./example.vue)
 
-## changelog
-
-### 2023/4/13
-
 1. 新增组件文档
 
 ## 开发参考
