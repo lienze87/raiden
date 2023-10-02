@@ -1,5 +1,6 @@
 .editor {
   position: relative;
+  font-size: 14px;
   line-height: 20px;
   font-weight: 400;
   text-align: left;
@@ -7,7 +8,7 @@
 
 .editor-input {
   position: relative;
-  padding: 1em;
+  padding: 14px;
   box-sizing: border-box;
   height: 100%;
   border: 1px solid #ccc;
@@ -15,10 +16,9 @@
 }
 
 .editor-placeholder {
-  display: inline-block;
   position: absolute;
-  top: 2em;
-  left: 1em;
+  top: 50px;
+  left: 14px;
   color: #999;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -1,62 +1,54 @@
-import type { EditorState } from "lexical";
-import { useState, useRef } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
+import { marked } from "marked";
+import { TextField } from "@mui/material";
+import Box from "@mui/material/Box";
 
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+export default function Editor() {
+  const [content, setContent] = useState("");
+  const [mdHtml, setMdHtml] = useState({
+    __html: "",
+  });
 
-import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+  useEffect(() => {
+    const delayRender = setTimeout(() => {
+      setMdHtml({
+        __html: marked.parse(content),
+      });
+    }, 500);
+    return () => clearTimeout(delayRender);
+  }, [content]);
 
-import "./main.css";
-
-const theme = {
-  fontSize: "16px",
-};
-
-function onError(error: Error) {
-  console.error(error);
-}
-
-function Placeholder() {
-  return <div className="editor-placeholder">Enter some text...</div>;
-}
-
-function MyEditor() {
-  const editorRef = useRef(null);
-  const [editorState, setEditorState] = useState();
-
-  const initialConfig = {
-    editorState: editorState,
-    namespace: "MyEditor",
-    theme,
-    onError,
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(event.target.value);
   };
 
-  function handleChange(state: EditorState) {
-    state.read(() => {
-      const root = state._nodeMap.get("root");
-      const selection = state._selection?.getTextContent();
-    });
-
-    const editorStateJSON = state.toJSON();
-    setEditorState(JSON.stringify(editorStateJSON));
-  }
-
   return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <RichTextPlugin
-        contentEditable={<ContentEditable className="editor-input" />}
-        placeholder={<Placeholder />}
-        ErrorBoundary={LexicalErrorBoundary}
-      />
-      <OnChangePlugin onChange={handleChange} />
-      <HistoryPlugin />
-      <AutoFocusPlugin />
-    </LexicalComposer>
+    <Box className="container" sx={{ display: "flex", padding: 1 }}>
+      <Box className="textarea" sx={{ flex: 1, marginRight: 1 }}>
+        <div>文本输入框</div>
+        <Box>
+          <TextField
+            value={content}
+            multiline
+            minRows={10}
+            style={{ width: "100%" }}
+            onChange={handleChange}
+          />
+        </Box>
+      </Box>
+      <Box className="render" sx={{ flex: 1 }}>
+        <div>MarkDown</div>
+        <Box
+          sx={{
+            padding: "14px",
+            boxSizing: "border-box",
+            height: "100%",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+          }}>
+          <div dangerouslySetInnerHTML={mdHtml}></div>
+        </Box>
+      </Box>
+    </Box>
   );
 }
-
-export default MyEditor;
