@@ -1,9 +1,14 @@
+import dynamic from "next/dynamic";
 import { ChangeEvent, useState, useEffect } from "react";
 import { marked } from "marked";
 import { TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 
-export default function BasicList() {
+const NoSSREditor = dynamic(() => import("../components/editor/index"), {
+  ssr: false,
+});
+
+export default function MainApp() {
   const [content, setContent] = useState("");
   const [mdHtml, setMdHtml] = useState({
     __html: "",
@@ -25,15 +30,24 @@ export default function BasicList() {
   return (
     <Box className="container" sx={{ display: "flex", padding: 1 }}>
       <Box className="editor" sx={{ flex: 1, marginRight: 1 }}>
-        <TextField
-          value={content}
-          multiline
-          minRows={10}
-          style={{ width: "100%" }}
-          onChange={handleChange}
-        />
+        <div>Lexical编辑器</div>
+        <NoSSREditor />
+      </Box>
+      <Box className="textarea" sx={{ flex: 1, marginRight: 1 }}>
+        <div>文本输入框</div>
+        <Box>
+          <TextField
+            value={content}
+            multiline
+            minRows={10}
+            style={{ width: "100%" }}
+            placeholder="Enter some text..."
+            onChange={handleChange}
+          />
+        </Box>
       </Box>
       <Box className="render" sx={{ flex: 1 }}>
+        <div>MarkDown</div>
         <Box
           sx={{
             padding: "14px",

@@ -1,0 +1,27 @@
+.editor {
+  position: relative;
+  line-height: 20px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.editor-input {
+  position: relative;
+  padding: 1em;
+  box-sizing: border-box;
+  height: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.editor-placeholder {
+  display: inline-block;
+  position: absolute;
+  top: 2em;
+  left: 1em;
+  color: #999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  pointer-events: none;
+}
