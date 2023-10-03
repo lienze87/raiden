@@ -1,4 +1,5 @@
 import {
+  FocusEvent,
   ChangeEvent,
   KeyboardEvent,
   useRef,
@@ -19,17 +20,12 @@ interface InputNumberProps {
   onChange: (value: number | string | null | undefined) => void;
 }
 
-interface Data {
-  currentValue: number | string | null | undefined;
-  userInput: null | number | string;
-}
-
 export default function InputNumber(props: InputNumberProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [data, setData] = useState<Data>({
-    currentValue: props.value,
-    userInput: null,
-  });
+  const [currentDataValue, setCurrentDataValue] = useState<
+    number | string | null | undefined
+  >(props.value);
+  const [userInput, setUserInput] = useState<null | number | string>(null);
 
   const config = {
     step: 1,
@@ -41,6 +37,7 @@ export default function InputNumber(props: InputNumberProps) {
     max: Number.POSITIVE_INFINITY,
     stepStrictly: false,
     valueOnClear: null,
+    ...props,
   };
 
   const getPrecision = (value: number | string | null | undefined) => {
@@ -89,11 +86,11 @@ export default function InputNumber(props: InputNumberProps) {
 
   const ensurePrecision = useCallback(
     (val: number | string, coefficient: 1 | -1 = 1) => {
-      if (!isNumber(val)) return data.currentValue;
+      if (!isNumber(val)) return currentDataValue;
       // Solve the accuracy problem of JS decimal calculation by converting the value to integer.
       return toPrecision(val + config.step * coefficient);
     },
-    [data.currentValue, config.step, toPrecision]
+    [currentDataValue, config.step, toPrecision]
   );
 
   const minDisabled = useMemo(
@@ -111,10 +108,10 @@ export default function InputNumber(props: InputNumberProps) {
   );
 
   const displayValue = useMemo(() => {
-    if (data.userInput !== null) {
-      return data.userInput;
+    if (userInput !== null) {
+      return userInput;
     }
-    let currentValue: number | string | undefined | null = data.currentValue;
+    let currentValue: number | string | undefined | null = currentDataValue;
     if (isNil(currentValue)) return "";
     if (isNumber(currentValue)) {
       if (Number.isNaN(currentValue)) return "";
@@ -124,7 +121,7 @@ export default function InputNumber(props: InputNumberProps) {
     }
 
     return currentValue;
-  }, [data.userInput, data.currentValue, config.precision]);
+  }, [userInput, currentDataValue, config.precision]);
 
   const increase = () => {
     if (config.readOnly || config.disabled || maxDisabled) return;
@@ -179,29 +176,30 @@ export default function InputNumber(props: InputNumberProps) {
 
     return newVal;
   };
+
   const setCurrentValue = (value: number | string | null | undefined) => {
-    const oldVal = data.currentValue;
+    const oldVal = currentDataValue;
     const newVal = verifyValue(value);
     if (oldVal === newVal) return;
-    data.userInput = null;
 
     props.onChange(newVal);
-
-    data.currentValue = newVal;
+    setCurrentDataValue(newVal);
   };
 
+  // mui的input组件会在onInput时触发onChange
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
-    data.userInput = event.target?.value;
+    setUserInput(event.currentTarget.value);
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.currentTarget.value);
+  // 失去焦点后再格式化数据
+  const handleInputChange = (event: FocusEvent<HTMLInputElement>) => {
     let value = event.currentTarget.value;
+
     const newVal = value !== "" ? Number(value) : "";
     if ((isNumber(newVal) && !Number.isNaN(newVal)) || value === "") {
       setCurrentValue(newVal);
     }
-    data.userInput = null;
+    setUserInput(null);
   };
 
   return (
@@ -214,8 +212,8 @@ export default function InputNumber(props: InputNumberProps) {
       readOnly={config.readOnly}
       disabled={config.disabled}
       inputProps={{ min: config.min, max: config.max }}
-      onInput={handleInput}
-      onChange={handleInputChange}
+      onChange={handleInput}
+      onBlur={handleInputChange}
     />
   );
 }
