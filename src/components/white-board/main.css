@@ -1,0 +1,13 @@
+.white-board {
+  position: relative;
+}
+
+.white-board-content {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#my-canvas {
+  cursor: crosshair;
+}

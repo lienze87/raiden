@@ -1,11 +1,10 @@
-import { useState } from "react";
 import Box from "@mui/material/Box";
-import Editor from "@/components/editor/index";
+import WhiteBoard from "@/components/white-board/index";
 
 export default function MainApp() {
   return (
     <Box className="container" sx={{ padding: 1 }}>
-      <Editor />
+      <WhiteBoard />
     </Box>
   );
 }
