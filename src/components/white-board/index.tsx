@@ -148,7 +148,7 @@ export default function WhiteBoard() {
   return (
     <div className="white-board">
       <div className="action-bar">
-        <Button variant="outlined" onClick={handleReset}>
+        <Button variant="contained" onClick={handleReset}>
           重置
         </Button>
       </div>

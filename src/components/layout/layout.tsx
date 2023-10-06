@@ -1,6 +1,7 @@
 import * as React from "react";
 import Head from "next/head";
 import Header from "./header";
+import "./main.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
